@@ -1,0 +1,22 @@
+# Core dependencies (Week 1 - Week 2 Foundation)
+PyYAML>=6.0.1
+numpy>=1.26.0
+psutil>=5.9.8
+jsonschema>=4.21.0
+
+# Image processing (Optional in mock mode; required for real image/camera preprocessing)
+# Pillow>=10.0.0
+# opencv-python-headless>=4.9.0
+
+# Testing (Optional if using standard library unittest; recommended for pytest runner)
+# pytest>=8.0.0
+
+# AI Runtime Frameworks (Uncomment on Raspberry Pi 5 / host once actual model format is confirmed)
+# onnxruntime>=1.17.0
+# ultralytics>=8.1.0
+# tflite-runtime>=2.14.0
+
+# Note on ROS 2:
+# rclpy and std_msgs are installed via apt on Ubuntu / Raspberry Pi OS (e.g., ros-humble-rclpy or ros-jazzy-rclpy),
+# NOT via pip.
+

@@ -1,0 +1,79 @@
+# ==============================================================================
+# SMART INSPECTOR SYSTEM - KONFIGURASI UTAMA (settings.yaml)
+# Target Perangkat Keras: Raspberry Pi 5 (8GB RAM)
+# Lingkungan Pengembangan: Windows Laptop (Mock / Local Dev)
+# ==============================================================================
+
+system:
+  # Nama node / sistem untuk logging dan identifikasi perangkat
+  node_name: "smart_inspector_companion"
+  # Lingkungan saat ini: "development" (Laptop Windows) atau "production" (Raspberry Pi 5)
+  environment: "development"
+  # Mode runtime inferensi:
+  # - "mock" : Menggunakan MockInferenceEngine (aman dijalankan tanpa file bobot model asli)
+  # - "real" : Memuat file model asli dari disk (membutuhkan bobot model di folder models/)
+  runtime_mode: "mock"
+  # Level log: DEBUG, INFO, WARNING, ERROR
+  log_level: "INFO"
+
+execution:
+  # Mode eksekusi model AI:
+  # - "sequential": Menjalankan model yang aktif satu per satu secara berurutan (hemat RAM/CPU)
+  # - "parallel"  : Menjalankan beberapa model secara paralel menggunakan worker pool (untuk Minggu 3-4)
+  mode: "sequential"
+  # Jumlah maksimum worker paralel jika mode == "parallel" (dibatasi sesuai 4 core Cortex-A76 di RPi 5)
+  max_workers: 2
+  # Batas waktu (timeout) inferensi per model dalam milidetik
+  timeout_ms: 5000
+  # Daftar ID model yang diaktifkan pada siklus inspeksi saat ini.
+  # Minggu 2 memfokuskan pada 1 model terlebih dahulu (vertical slice: ripeness_ffb).
+  enabled_models:
+    - "ripeness_ffb"
+    # Model 2-5 dinonaktifkan secara default pada Minggu 2 hingga bobot model tersedia:
+    # - "health_inspector"
+    # - "pest_detector"
+    # - "disease_detector"
+    # - "flower_pollination"
+
+input_source:
+  # Jenis sumber input citra:
+  # - "image_file"  : Membaca satu file gambar statis (fokus Minggu 2)
+  # - "synthetic"   : Membuat citra sintetis/array NumPy di memori untuk pengujian mandiri
+  # - "usb_camera"  : Kamera USB (disiapkan untuk ekstensi Minggu 3+)
+  # - "drone_stream": Stream video kamera drone RTSP/UDP (disiapkan untuk ekstensi Minggu 3+)
+  type: "image_file"
+  # Path relatif terhadap root proyek untuk sampel gambar pengujian
+  sample_image_path: "tests/assets/sample_palm.ppm"
+  # Resolusi default jika menggunakan synthetic input [lebar, tinggi]
+  default_resolution: [640, 640]
+  # ID perangkat kamera (jika type == "usb_camera")
+  camera_device_id: 0
+
+ros2:
+  # Apakah integrasi publisher ROS 2 diaktifkan saat menjalankan main pipeline.
+  # Set ke false pada Windows tanpa ROS 2 agar aplikasi berjalan di mode mock/standalone.
+  enabled: false
+  # Nama node ROS 2
+  node_name: "smart_inspector_inference_node"
+  # Konfigurasi nama topik ROS 2 (menggunakan std_msgs/msg/String berisi payload JSON terstandarisasi)
+  topics:
+    inference_results: "/smart_inspector/inference/results"
+    system_status: "/smart_inspector/system/status"
+    heartbeat: "/smart_inspector/system/heartbeat"
+  # Kedalaman antrean QoS (Quality of Service)
+  qos_depth: 10
+  # Frekuensi publikasi contoh / heartbeat dalam Hz (untuk proof of concept)
+  publish_rate_hz: 1.0
+
+api:
+  # Apakah server API lokal diaktifkan (implementasi penuh dijadwalkan Minggu 4-5)
+  enabled: false
+  # Host bind address: "0.0.0.0" agar dapat diakses oleh tim dashboard di jaringan intranet lokal (LAN/WLAN)
+  host: "0.0.0.0"
+  # Port HTTP lokal
+  port: 8000
+  # Prefix versi endpoint API
+  version_prefix: "/api/v1"
+  # Maksimum jumlah riwayat hasil inferensi yang disimpan di memori (ring buffer)
+  max_history_size: 100
+
