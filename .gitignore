@@ -1,0 +1,53 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment variables and secrets
+.env
+*.secret
+
+# Pytest and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Trained AI model weights and large artifacts (do not commit to Git)
+models/**/*.pt
+models/**/*.pth
+models/**/*.onnx
+models/**/*.tflite
+models/**/*.pb
+models/**/*.h5
+models/**/*.weights
+models/**/*.bin
+models/**/*.engine
+models/**/*.ncnn*
+models/**/*.mnn
+!models/**/.gitkeep
+!models/**/README.md
+
+# Datasets and captured runtime media
+data/
+outputs/
+logs/*.log
+*.mp4
+*.avi
+*.mov
+
+# ROS 2 build / install / log artifacts (if colcon is run in workspace)
+build/
+install/
+log/
+
+# OS / IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
